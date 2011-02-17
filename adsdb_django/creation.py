@@ -48,7 +48,6 @@ class DatabaseCreation(BaseDatabaseCreation):
         return [], True
 
     def sql_for_inline_many_to_many_references(self, model, field, style):
-        print 'ADSDB sql_for_inline_many_to_many_references\n'
         from django.db import models
         opts = model._meta
         qn = self.connection.ops.quote_name
@@ -76,31 +75,6 @@ class DatabaseCreation(BaseDatabaseCreation):
     def sql_remove_table_constraints(self, model, references_to_delete, style):
         "ADSDB doesn't support constraints"
         return []
-
-#    def sql_for_pending_references(self, model, style, pending_references):
-#        "Returns any ALTER TABLE statements to add constraints after the fact."
-#        from django.db.backends.util import truncate_name
-
-#        if not model._meta.managed or model._meta.proxy:
-#            return []
-#        qn = self.connection.ops.squote_name
-#        final_output = []
-#        opts = model._meta
-#        if model in pending_references:
-#            for rel_class, f in pending_references[model]:
-#                rel_opts = rel_class._meta
-#                r_table = rel_opts.db_table
-#                r_col = f.column
-#                table = opts.db_table
-#                col = opts.get_field(f.rel.field_name).column
-#                # Create a unique name for the relation
-#                r_name = '%s_refs_%s_%s' % (r_col, col, self._digest(r_table, table))
-#                final_output.append(style.SQL_KEYWORD('EXECUTE PROCEDURE') + ' sp_CreateReferentialIntegrity( %s, %s, %s, %s, 1, 1, NULL, NULL, NULL );' % \
-#                                    (qn(truncate_name(r_name, self.connection.ops.max_name_length())), qn(table), qn(r_table), qn('PK_' + r_table)));
-#                print '\n\nADSDB refs: %s, %s, %s, %s, %s' % (r_col, col, table, r_table, rel_opts)
-#                print f.rel
-#            del pending_references[model]
-#        return final_output
 
     def _create_test_db(self, verbosity, autoclobber):
         "Internal implementation - creates the test db tables."
@@ -231,7 +205,6 @@ class DatabaseCreation(BaseDatabaseCreation):
         return outputs, pending
 
     def sql_for_many_to_many_field(self, model, f, style):
-        print 'ADSDB sql_for_many_to_many_field\n'
         "Return the CREATE TABLE + CREATE UNIQUE INDEX statements for a single m2m field"
         # Let BaseDatabaseCreation do most of the work
         outputs = super(DatabaseCreation, self).sql_for_many_to_many_field(model, f, style)
