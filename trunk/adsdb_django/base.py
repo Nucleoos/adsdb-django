@@ -345,6 +345,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                 kwargs['DataSource'] = settings_dict['NAME']
             if settings_dict['PASSWORD']:
                 kwargs['PASSWORD'] = settings_dict['PASSWORD']
+            kwargs.update(settings_dict['OPTIONS'])
             self.connection = Database.connect(**kwargs)
             connection_created.send(sender=self.__class__)
         cursor = CursorWrapper(self.connection.cursor())
