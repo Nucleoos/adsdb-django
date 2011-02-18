@@ -11,15 +11,18 @@ Getting Started
 
 a) Advantage Database Server 10.1
 
-In addition to Advantage Database Server, you can also use Advantage
-Local Server with Django.  Local server is an in-process, non 
-client-server version of Advantage that is free to use and distribute.
-The local server is included in any Advantage client install such as
-the Advantage Client Engine as well as the Advantage Data Architect
-database management utility.  You can download Advantage here:
+Web based Advantage applications must use remote server connections
+(as oppposed to local server connections) to the Advantage Database
+Server.  Using local server in a web environment violates the local
+server license.  However, local server may be used during development
+on a local PC if desired.  Both local and remote server versions can
+be downloaded here:
 
 http://www.sybase.com/products/databasemanagement/advantagedatabaseserver
-   
+
+NOTE: You should also download and install Advantage Data Architect (ARC)
+to create the initial database and manage it in the future.
+
 b) Python (2.4 or greater)
 
 Install Python if you don't already have it installed. We recommend
@@ -93,8 +96,8 @@ CREATE DATABASE [c:\test\django.add];
 
 If all goes well Advantage will have created a new database file
 named 'django.add' in c:\test, or whichever directory you specified.
-Feel free to move this database file to any location you
-want. You can even copy it to a machine running a different operating
+Feel free to move the database files to any location you want.
+You can even copy it to a machine running a different operating
 system if you wish.
 
 
