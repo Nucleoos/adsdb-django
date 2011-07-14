@@ -109,10 +109,11 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     allows_group_by_pk = False
     related_fields_match_type = True
     uses_custom_query_class = True
-    interprets_empty_strings_as_nulls = True
+    interprets_empty_strings_as_nulls = False
 
 class DatabaseOperations(BaseDatabaseOperations):
     compiler_module = "adsdb_django.compiler"
+    ads_table_type = 'ADT'
 
     def date_extract_sql(self, lookup_type, field_name):
         """
@@ -183,7 +184,8 @@ class DatabaseOperations(BaseDatabaseOperations):
         Returns the maximum length of table and column names, or None if there
         is no limit.
         """
-        # ADS has a maximum of 128 for column names, and 255 for table names
+        # ADT and VFP have a maximum of 128 for column names, and 255 for table names
+        # If we add support for CDX or NTX indexes this should return 10 for those types
         return 128
 
     def no_limit_value(self):
@@ -347,6 +349,11 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             if settings_dict['PASSWORD']:
                 kwargs['PASSWORD'] = settings_dict['PASSWORD']
             kwargs.update(settings_dict['OPTIONS'])
+            # Save the table type
+            self.ops.ads_table_type = settings_dict['OPTIONS']['TableType']
+            if self.ops.ads_table_type == None:
+                # default to ADT if the table type wasn't specified
+                self.ops.ads_table_type = 'ADT'
             self.connection = Database.connect(**kwargs)
             connection_created.send(sender=self.__class__)
         cursor = CursorWrapper(self.connection.cursor())
