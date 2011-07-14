@@ -177,8 +177,9 @@ class DatabaseCreation(BaseDatabaseCreation):
         unique_nullable_fields = []
 
         for f in opts.local_fields:
-            # Set all fields to be nullable so we don't get NOT NULL in the SQL
-            f.null = True
+            if self.connection.ops.ads_table_type == 'ADT':
+                # Set all ADT fields to be nullable so we don't get NOT NULL in the SQL
+                f.null = True
             if f.unique and f.null:
                 unique_nullable_fields.append(f)
                 f._unique = False
