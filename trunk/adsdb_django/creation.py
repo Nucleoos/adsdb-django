@@ -206,21 +206,5 @@ class DatabaseCreation(BaseDatabaseCreation):
         return outputs, pending
 
     def sql_for_many_to_many_field(self, model, f, style):
-        "Return the CREATE TABLE + CREATE UNIQUE INDEX statements for a single m2m field"
-        # Let BaseDatabaseCreation do most of the work
-        outputs = super(DatabaseCreation, self).sql_for_many_to_many_field(model, f, style)
-
-        from django.db import models
-        from django.db.backends.util import truncate_name
-
-        if f.creates_table:
-            opts = model._meta
-            qn = self.connection.ops.quote_name
-            fields = [f.m2m_column_name(), f.m2m_reverse_name()]
-            outputs = self._unique_swap_many(outputs,
-                                             fields,
-                                             model,
-                                             style,
-                                             table=f.m2m_db_table())
-        
-        return outputs
+        "ADS doesn't support relations with django"
+        return []
